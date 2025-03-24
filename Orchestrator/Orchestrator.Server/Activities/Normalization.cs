@@ -9,7 +9,7 @@ using Orchestrator.Managers;
 
 namespace Orchestrator.Server.Activities;
 
-[Activity("Slices", Category = "SLICES", DisplayName = "Normalization")]
+[Activity("Slices", Category = "FRATE", DisplayName = "Normalization")]
 public class Normalization : PythonFaasActivityBase
 {
     #region Inputs/Outputs

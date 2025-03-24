@@ -6,7 +6,7 @@ using Orchestrator.Managers;
 
 namespace Orchestrator.Server.Activities;
 
-[Activity("Slices", Category = "SLICES", DisplayName = "Drop Columns")]
+[Activity("Slices", Category = "FRATE", DisplayName = "Drop Columns")]
 public class DropColumns : PythonFaasActivityBase
 {
     #region Inputs/Ouputs

@@ -1,0 +1,201 @@
+{
+  "$schema": "https://elsaworkflows.io/schemas/workflow-definition/v3.0.0/schema.json",
+  "id": "503bfbd8ee2a3dc6",
+  "definitionId": "fdf510f7c80b9172",
+  "name": "Simple Workflow Clustering",
+  "createdAt": "2025-03-05T21:27:30.005817\u002B00:00",
+  "version": 1,
+  "toolVersion": "3.2.0.0",
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "outcomes": [],
+  "customProperties": {},
+  "isReadonly": false,
+  "isSystem": false,
+  "isLatest": true,
+  "isPublished": false,
+  "options": {
+    "autoUpdateConsumingWorkflows": false
+  },
+  "root": {
+    "type": "Elsa.Flowchart",
+    "version": 1,
+    "id": "678390349d7956c4",
+    "nodeId": "Workflow1:678390349d7956c4",
+    "metadata": {},
+    "customProperties": {
+      "source": "FlowchartJsonConverter.cs:45",
+      "notFoundConnections": [],
+      "canStartWorkflow": false,
+      "runAsynchronously": false
+    },
+    "activities": [
+      {
+        "id": "b1dfb6d37fb3e1ae",
+        "nodeId": "Workflow1:678390349d7956c4:b1dfb6d37fb3e1ae",
+        "name": "Start1",
+        "type": "Elsa.Start",
+        "version": 1,
+        "customProperties": {
+          "canStartWorkflow": false,
+          "runAsynchronously": false
+        },
+        "metadata": {
+          "designer": {
+            "position": {
+              "x": 85.828125,
+              "y": 40
+            },
+            "size": {
+              "width": 101.65625,
+              "height": 50
+            }
+          }
+        }
+      },
+      {
+        "inDataframe": null,
+        "algorithm": null,
+        "nClusters": null,
+        "randomState": null,
+        "damping": null,
+        "preference": null,
+        "eigenSolver": null,
+        "affinity": null,
+        "eps": null,
+        "minSamples": null,
+        "maxEps": null,
+        "minClusterSize": null,
+        "threshold": null,
+        "linkage": null,
+        "branchingFactor": null,
+        "outDataframe": null,
+        "id": "768e14a90b26c06f",
+        "nodeId": "Workflow1:678390349d7956c4:768e14a90b26c06f",
+        "name": "Clustering1",
+        "type": "Slices.Clustering",
+        "version": 1,
+        "customProperties": {
+          "canStartWorkflow": false,
+          "runAsynchronously": false
+        },
+        "metadata": {
+          "designer": {
+            "position": {
+              "x": 548.0078125,
+              "y": 40
+            },
+            "size": {
+              "width": 104.109375,
+              "height": 50
+            }
+          }
+        }
+      },
+      {
+        "fileName": {
+          "typeName": "String",
+          "expression": {
+            "type": "Literal",
+            "value": "pipe.csv"
+          }
+        },
+        "mode": null,
+        "delimiter": {
+          "typeName": "String",
+          "expression": {
+            "type": "Literal",
+            "value": "Pipe"
+          }
+        },
+        "startLine": null,
+        "endLine": null,
+        "outDataframe": null,
+        "id": "429cedb138c5763f",
+        "nodeId": "Workflow1:678390349d7956c4:429cedb138c5763f",
+        "name": "ImportTextData1",
+        "type": "Slices.ImportTextData",
+        "version": 1,
+        "customProperties": {
+          "canStartWorkflow": false,
+          "runAsynchronously": false
+        },
+        "metadata": {
+          "designer": {
+            "position": {
+              "x": 316.3046875,
+              "y": 40
+            },
+            "size": {
+              "width": 149.296875,
+              "height": 50
+            }
+          }
+        }
+      },
+      {
+        "inDataframe": null,
+        "mode": null,
+        "delimiter": null,
+        "startLine": null,
+        "endLine": null,
+        "outDataframe": null,
+        "fileName": null,
+        "id": "996f6ff649d97dd",
+        "nodeId": "Workflow1:678390349d7956c4:996f6ff649d97dd",
+        "name": "ExportToFile1",
+        "type": "Slices.ExportToFile",
+        "version": 1,
+        "customProperties": {
+          "canStartWorkflow": false,
+          "runAsynchronously": false
+        },
+        "metadata": {
+          "designer": {
+            "position": {
+              "x": 768.9296875,
+              "y": 40
+            },
+            "size": {
+              "width": 127.734375,
+              "height": 50
+            }
+          }
+        }
+      }
+    ],
+    "connections": [
+      {
+        "source": {
+          "activity": "b1dfb6d37fb3e1ae",
+          "port": "Done"
+        },
+        "target": {
+          "activity": "429cedb138c5763f",
+          "port": "In"
+        }
+      },
+      {
+        "source": {
+          "activity": "429cedb138c5763f",
+          "port": "Done"
+        },
+        "target": {
+          "activity": "768e14a90b26c06f",
+          "port": "In"
+        }
+      },
+      {
+        "source": {
+          "activity": "768e14a90b26c06f",
+          "port": "Done"
+        },
+        "target": {
+          "activity": "996f6ff649d97dd",
+          "port": "In"
+        }
+      }
+    ]
+  }
+}

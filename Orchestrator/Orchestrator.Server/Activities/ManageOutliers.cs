@@ -8,7 +8,7 @@ using Orchestrator.Managers;
 
 namespace Orchestrator.Server.Activities;
 
-[Activity("Slices", Category = "SLICES", DisplayName = "Manage Outliers")]
+[Activity("Slices", Category = "FRATE", DisplayName = "Manage Outliers")]
 public class ManageOutliers : PythonFaasActivityBase
 {
     #region Inputs/Outputs

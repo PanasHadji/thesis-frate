@@ -6,7 +6,7 @@ using Orchestrator.Managers;
 
 namespace Orchestrator.Server.Activities;
 
-[Activity("Slices", Category = "SLICES", DisplayName = "Sort Columns")]
+[Activity("Slices", Category = "FRATE", DisplayName = "Sort Columns")]
 public class SortColumns : PythonFaasActivityBase
 {
     #region Inputs/Ouputs

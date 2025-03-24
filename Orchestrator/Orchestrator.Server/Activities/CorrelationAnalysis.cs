@@ -7,7 +7,7 @@ using Orchestrator.Managers;
 
 namespace Orchestrator.Server.Activities;
 
-[Activity("Slices", Category = "SLICES", DisplayName = "Correlation Analysis")]
+[Activity("Slices", Category = "FRATE", DisplayName = "Correlation Analysis")]
 public class CorrelationAnalysis : PythonFaasActivityBase
 {
     #region Inputs/Outputs

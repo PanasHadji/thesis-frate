@@ -1,0 +1,193 @@
+{
+  "$schema": "https://elsaworkflows.io/schemas/workflow-definition/v3.0.0/schema.json",
+  "id": "a133759fc05c4465",
+  "definitionId": "af63486a50cbb672",
+  "name": "Simple Workflow Impute",
+  "createdAt": "2025-03-05T16:17:50.46025\u002B00:00",
+  "version": 1,
+  "toolVersion": "3.2.0.0",
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "outcomes": [],
+  "customProperties": {},
+  "isReadonly": false,
+  "isSystem": false,
+  "isLatest": true,
+  "isPublished": false,
+  "options": {
+    "autoUpdateConsumingWorkflows": false
+  },
+  "root": {
+    "type": "Elsa.Flowchart",
+    "version": 1,
+    "id": "55d1c9abcb2a0fe4",
+    "nodeId": "Workflow1:55d1c9abcb2a0fe4",
+    "metadata": {},
+    "customProperties": {
+      "source": "FlowchartJsonConverter.cs:45",
+      "notFoundConnections": [],
+      "canStartWorkflow": false,
+      "runAsynchronously": false
+    },
+    "activities": [
+      {
+        "id": "9cb50bf2ec00593c",
+        "nodeId": "Workflow1:55d1c9abcb2a0fe4:9cb50bf2ec00593c",
+        "name": "Start1",
+        "type": "Elsa.Start",
+        "version": 1,
+        "customProperties": {
+          "canStartWorkflow": false,
+          "runAsynchronously": false
+        },
+        "metadata": {
+          "designer": {
+            "position": {
+              "x": 145.49005508422852,
+              "y": 39.89346504211426
+            },
+            "size": {
+              "width": 101.65625,
+              "height": 50
+            }
+          }
+        }
+      },
+      {
+        "inDataframe": null,
+        "outDataframe": null,
+        "id": "3768e9b8582a26fa",
+        "nodeId": "Workflow1:55d1c9abcb2a0fe4:3768e9b8582a26fa",
+        "name": "ImputeMissingValues1",
+        "type": "Slices.ImputeMissingValues",
+        "version": 1,
+        "customProperties": {
+          "canStartWorkflow": false,
+          "runAsynchronously": false
+        },
+        "metadata": {
+          "designer": {
+            "position": {
+              "x": 530.7883377075195,
+              "y": 39.89346504211426
+            },
+            "size": {
+              "width": 193,
+              "height": 50
+            }
+          }
+        }
+      },
+      {
+        "inDataframe": null,
+        "mode": null,
+        "delimiter": null,
+        "startLine": null,
+        "endLine": null,
+        "outDataframe": null,
+        "fileName": null,
+        "id": "a22fc313adba6f2",
+        "nodeId": "Workflow1:55d1c9abcb2a0fe4:a22fc313adba6f2",
+        "name": "ExportToFile1",
+        "type": "Slices.ExportToFile",
+        "version": 1,
+        "customProperties": {
+          "canStartWorkflow": false,
+          "runAsynchronously": false
+        },
+        "metadata": {
+          "designer": {
+            "position": {
+              "x": 795.497142791748,
+              "y": 39.89346504211426
+            },
+            "size": {
+              "width": 127.734375,
+              "height": 50
+            }
+          }
+        }
+      },
+      {
+        "fileName": {
+          "typeName": "String",
+          "expression": {
+            "type": "Literal",
+            "value": "commaNumericWithNulls.csv"
+          }
+        },
+        "mode": {
+          "typeName": "String",
+          "expression": {
+            "type": "Literal",
+            "value": "Delimited"
+          }
+        },
+        "delimiter": {
+          "typeName": "String",
+          "expression": {
+            "type": "Literal",
+            "value": "Comma"
+          }
+        },
+        "startLine": null,
+        "endLine": null,
+        "outDataframe": null,
+        "id": "1f9f835bdac0a1c1",
+        "nodeId": "Workflow1:55d1c9abcb2a0fe4:1f9f835bdac0a1c1",
+        "name": "ImportTextData1",
+        "type": "Slices.ImportTextData",
+        "version": 1,
+        "customProperties": {
+          "canStartWorkflow": false,
+          "runAsynchronously": false
+        },
+        "metadata": {
+          "designer": {
+            "position": {
+              "x": 315.2982864379883,
+              "y": 39.89346504211426
+            },
+            "size": {
+              "width": 149.296875,
+              "height": 50
+            }
+          }
+        }
+      }
+    ],
+    "connections": [
+      {
+        "source": {
+          "activity": "9cb50bf2ec00593c",
+          "port": "Done"
+        },
+        "target": {
+          "activity": "1f9f835bdac0a1c1",
+          "port": "In"
+        }
+      },
+      {
+        "source": {
+          "activity": "1f9f835bdac0a1c1",
+          "port": "Done"
+        },
+        "target": {
+          "activity": "3768e9b8582a26fa",
+          "port": "In"
+        }
+      },
+      {
+        "source": {
+          "activity": "3768e9b8582a26fa",
+          "port": "Done"
+        },
+        "target": {
+          "activity": "a22fc313adba6f2",
+          "port": "In"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,274 @@
+{
+  "$schema": "https://elsaworkflows.io/schemas/workflow-definition/v3.0.0/schema.json",
+  "id": "48109304cf876674",
+  "definitionId": "8465ab2921d07180",
+  "name": "Medium Workflow Decision Tree",
+  "createdAt": "2025-03-05T21:35:53.353564\u002B00:00",
+  "version": 1,
+  "toolVersion": "3.2.0.0",
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "outcomes": [],
+  "customProperties": {},
+  "isReadonly": false,
+  "isSystem": false,
+  "isLatest": true,
+  "isPublished": false,
+  "options": {
+    "autoUpdateConsumingWorkflows": false
+  },
+  "root": {
+    "type": "Elsa.Flowchart",
+    "version": 1,
+    "id": "f24a9e329c3c6201",
+    "nodeId": "Workflow1:f24a9e329c3c6201",
+    "metadata": {},
+    "customProperties": {
+      "source": "FlowchartJsonConverter.cs:45",
+      "notFoundConnections": [],
+      "canStartWorkflow": false,
+      "runAsynchronously": false
+    },
+    "activities": [
+      {
+        "method": null,
+        "inDataframe": null,
+        "outDataframe": null,
+        "id": "cb15b64f1b42914e",
+        "nodeId": "Workflow1:f24a9e329c3c6201:cb15b64f1b42914e",
+        "name": "ManageOutliers1",
+        "type": "Slices.ManageOutliers",
+        "version": 1,
+        "customProperties": {
+          "canStartWorkflow": false,
+          "runAsynchronously": false
+        },
+        "metadata": {
+          "designer": {
+            "position": {
+              "x": 868.40625,
+              "y": 40
+            },
+            "size": {
+              "width": 148.90625,
+              "height": 50
+            }
+          }
+        }
+      },
+      {
+        "id": "41afc037a066fce0",
+        "nodeId": "Workflow1:f24a9e329c3c6201:41afc037a066fce0",
+        "name": "Start1",
+        "type": "Elsa.Start",
+        "version": 1,
+        "customProperties": {
+          "canStartWorkflow": false,
+          "runAsynchronously": false
+        },
+        "metadata": {
+          "designer": {
+            "position": {
+              "x": 165.828125,
+              "y": 40
+            },
+            "size": {
+              "width": 101.65625,
+              "height": 50
+            }
+          }
+        }
+      },
+      {
+        "inDataframe": null,
+        "outDataframe": null,
+        "id": "b798d655c163536c",
+        "nodeId": "Workflow1:f24a9e329c3c6201:b798d655c163536c",
+        "name": "ImputeMissingValues1",
+        "type": "Slices.ImputeMissingValues",
+        "version": 1,
+        "customProperties": {
+          "canStartWorkflow": false,
+          "runAsynchronously": false
+        },
+        "metadata": {
+          "designer": {
+            "position": {
+              "x": 592.453125,
+              "y": 40
+            },
+            "size": {
+              "width": 193,
+              "height": 50
+            }
+          }
+        }
+      },
+      {
+        "inDataframe": null,
+        "mode": null,
+        "delimiter": null,
+        "startLine": null,
+        "endLine": null,
+        "outDataframe": null,
+        "fileName": null,
+        "id": "1174fa9120c5eb0e",
+        "nodeId": "Workflow1:f24a9e329c3c6201:1174fa9120c5eb0e",
+        "name": "ExportToFile1",
+        "type": "Slices.ExportToFile",
+        "version": 1,
+        "customProperties": {
+          "canStartWorkflow": false,
+          "runAsynchronously": false
+        },
+        "metadata": {
+          "designer": {
+            "position": {
+              "x": 1306.9609375,
+              "y": 40
+            },
+            "size": {
+              "width": 127.734375,
+              "height": 50
+            }
+          }
+        }
+      },
+      {
+        "fileName": {
+          "typeName": "String",
+          "expression": {
+            "type": "Literal",
+            "value": "commaNumericWithNulls.csv"
+          }
+        },
+        "mode": null,
+        "delimiter": {
+          "typeName": "String",
+          "expression": {
+            "type": "Literal",
+            "value": "Comma"
+          }
+        },
+        "startLine": null,
+        "endLine": null,
+        "outDataframe": null,
+        "id": "45a839ad8d0936fc",
+        "nodeId": "Workflow1:f24a9e329c3c6201:45a839ad8d0936fc",
+        "name": "ImportTextData1",
+        "type": "Slices.ImportTextData",
+        "version": 1,
+        "customProperties": {
+          "canStartWorkflow": false,
+          "runAsynchronously": false
+        },
+        "metadata": {
+          "designer": {
+            "position": {
+              "x": 376.3046875,
+              "y": 40
+            },
+            "size": {
+              "width": 149.296875,
+              "height": 50
+            }
+          }
+        }
+      },
+      {
+        "inDataframe": null,
+        "targetVariable": {
+          "typeName": "String",
+          "expression": {
+            "type": "Literal",
+            "value": "Category"
+          }
+        },
+        "criterion": null,
+        "splitter": null,
+        "maxDepth": null,
+        "minSamplesSplit": null,
+        "minSamplesLeaf": null,
+        "minWeightFraction": null,
+        "maxFeatures": null,
+        "maxLeafNodes": null,
+        "testSize": null,
+        "outDataframe": null,
+        "id": "78685c5fcfb3499b",
+        "nodeId": "Workflow1:f24a9e329c3c6201:78685c5fcfb3499b",
+        "name": "DecisionTreeBasic1",
+        "type": "Slices.DecisionTreeBasic",
+        "version": 1,
+        "customProperties": {
+          "canStartWorkflow": false,
+          "runAsynchronously": false
+        },
+        "metadata": {
+          "designer": {
+            "position": {
+              "x": 1072.9765625,
+              "y": 40
+            },
+            "size": {
+              "width": 170.234375,
+              "height": 50
+            }
+          }
+        }
+      }
+    ],
+    "connections": [
+      {
+        "source": {
+          "activity": "cb15b64f1b42914e",
+          "port": "Done"
+        },
+        "target": {
+          "activity": "78685c5fcfb3499b",
+          "port": "In"
+        }
+      },
+      {
+        "source": {
+          "activity": "78685c5fcfb3499b",
+          "port": "Done"
+        },
+        "target": {
+          "activity": "1174fa9120c5eb0e",
+          "port": "In"
+        }
+      },
+      {
+        "source": {
+          "activity": "41afc037a066fce0",
+          "port": "Done"
+        },
+        "target": {
+          "activity": "45a839ad8d0936fc",
+          "port": "In"
+        }
+      },
+      {
+        "source": {
+          "activity": "45a839ad8d0936fc",
+          "port": "Done"
+        },
+        "target": {
+          "activity": "b798d655c163536c",
+          "port": "In"
+        }
+      },
+      {
+        "source": {
+          "activity": "b798d655c163536c",
+          "port": "Done"
+        },
+        "target": {
+          "activity": "cb15b64f1b42914e",
+          "port": "In"
+        }
+      }
+    ]
+  }
+}

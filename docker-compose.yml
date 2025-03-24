@@ -7,8 +7,8 @@ services:
       ASPNETCORE_ENVIRONMENT: 'Development'
       ASPNETCORE_Slices__Workflow__AccessKey: minio_admin
       ASPNETCORE_Slices__Workflow__SecretKey: minio_admin_password
-      ASPNETCORE_Slices__Workflow__Bucket: stef-workflow-artifacts
-      ASPNETCORE_ConnectionStrings__elsadb: 'Host=postgres;Port=5432;Database=stef;Username=sa;Password=password1!;'
+      ASPNETCORE_Slices__Workflow__Bucket: frate-workflow-artifacts
+      ASPNETCORE_ConnectionStrings__elsadb: 'Host=postgres;Port=5432;Database=frate;Username=sa;Password=password1!;'
     ports:
       - '24000:8080' # Align if Dockerfile uses 80 as the main serving port
     depends_on:
@@ -23,7 +23,6 @@ services:
       Backend__Url: 'https://localhost:5001/elsa/api' # Should be the Elsa.Server host
     ports:
       - '24006:80'
-      - '24007:443'
   
   postgres:
     image: postgres:15
@@ -31,7 +30,7 @@ services:
     environment:
       POSTGRES_USER: sa
       POSTGRES_PASSWORD: password1!
-      POSTGRES_DB: stef
+      POSTGRES_DB: frate
     ports:
       - "5432:5432"
     volumes:
@@ -56,7 +55,7 @@ services:
     environment:
       MINIO_ROOT_USER: minio_admin
       MINIO_ROOT_PASSWORD: minio_admin_password
-      MINIO_DEFAULT_BUCKETS: stef-workflow-artifacts
+      MINIO_DEFAULT_BUCKETS: frate-workflow-artifacts
       MINIO_API_PORT_NUMBER: 24001
       MINIO_CONSOLE_PORT_NUMBER: 24002
       BITNAMI_DEBUG: 'true'
@@ -75,7 +74,7 @@ services:
   postgres-exporter:
     image: prometheuscommunity/postgres-exporter
     environment:
-      DATA_SOURCE_NAME: "postgresql://sa:password1!@postgres:5432/stef?sslmode=disable"
+      DATA_SOURCE_NAME: "postgresql://sa:password1!@postgres:5432/frate?sslmode=disable"
     ports:
       - "9187:9187"
     depends_on:

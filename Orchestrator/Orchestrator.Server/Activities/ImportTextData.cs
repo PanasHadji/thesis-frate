@@ -8,7 +8,7 @@ using Orchestrator.Managers;
 
 namespace Orchestrator.Server.Activities;
 
-[Activity("Slices", Category = "SLICES", DisplayName = "Import Text Data")]
+[Activity("Slices", Category = "FRATE", DisplayName = "Import Text Data")]
 public class ImportTextData : PythonFaasActivityBase
 {
     #region Inputs/Outputs

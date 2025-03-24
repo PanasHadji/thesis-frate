@@ -6,7 +6,7 @@ using Orchestrator.Managers;
 
 namespace Orchestrator.Server.Activities;
 
-[Activity("Slices", Category = "SLICES", DisplayName = "Stats")]
+[Activity("Slices", Category = "FRATE", DisplayName = "Stats")]
 public class Stats : PythonFaasActivityBase
 {
     #region Inputs/Outputs

@@ -6,7 +6,7 @@ using Orchestrator.Managers;
 
 namespace Orchestrator.Server.Activities;
 
-[Activity("Slices", Category = "SLICES", DisplayName = "Read CSV")]
+[Activity("Slices", Category = "FRATE", DisplayName = "Read CSV")]
 public class ReadCsv : PythonFaasActivityBase
 {
     #region Inputs/Outputs

@@ -8,7 +8,7 @@ using Orchestrator.Managers;
 
 namespace Orchestrator.Server.Activities;
 
-[Activity("Slices", Category = "SLICES", DisplayName = "Export To File")]
+[Activity("Slices", Category = "FRATE", DisplayName = "Export To File")]
 public class ExportToFile : PythonFaasActivityBase
 {
     #region Inputs/Outputs

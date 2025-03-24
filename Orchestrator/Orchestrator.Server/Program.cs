@@ -40,7 +40,7 @@ builder.Services.AddElsa(elsa =>
 {
     elsa.UseSasTokens(); // Optional for token-based auth
 
-    elsa.UseWorkflowManagement(management => { management.AddVariableType<PickleDfRef>(category: "SLICES"); });
+    elsa.UseWorkflowManagement(management => { management.AddVariableType<PickleDfRef>(category: "FRATE"); });
 
     elsa.UseIdentity(identity =>
     {

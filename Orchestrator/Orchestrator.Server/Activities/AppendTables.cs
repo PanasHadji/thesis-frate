@@ -7,7 +7,7 @@ using Orchestrator.Managers;
 namespace Orchestrator.Server.Activities;
 
 
-[Activity("Slices", Category = "SLICES", DisplayName = "Append Tables")]
+[Activity("Slices", Category = "FRATE", DisplayName = "Append Tables")]
 public class AppendTables : PythonFaasActivityBase
 {
     #region Input/Output

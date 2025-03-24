@@ -37,9 +37,9 @@ RegisterHttpClient(builder, builder.Services);
 
 builder.Services.AddOidcAuthentication(options =>
 {
-    options.ProviderOptions.MetadataUrl = "http://localhost:8080/realms/stef/.well-known/openid-configuration";
-    options.ProviderOptions.Authority = "http://localhost:8080/realms/stef";
-    options.ProviderOptions.ClientId = "stef";
+    options.ProviderOptions.MetadataUrl = "http://localhost:8080/realms/frate/.well-known/openid-configuration";
+    options.ProviderOptions.Authority = "http://localhost:8080/realms/frate";
+    options.ProviderOptions.ClientId = "frate";
     options.ProviderOptions.ResponseType = "id_token token";
     //options.ProviderOptions.DefaultScopes.Add("Audience");
 

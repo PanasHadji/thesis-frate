@@ -1,0 +1,194 @@
+{
+  "$schema": "https://elsaworkflows.io/schemas/workflow-definition/v3.0.0/schema.json",
+  "id": "f8f95fa58670c4fc",
+  "definitionId": "3d33092f28cbb995",
+  "name": "Simple Workflow Remove Column",
+  "createdAt": "2025-03-05T21:31:40.177503\u002B00:00",
+  "version": 1,
+  "toolVersion": "3.2.0.0",
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "outcomes": [],
+  "customProperties": {},
+  "isReadonly": false,
+  "isSystem": false,
+  "isLatest": true,
+  "isPublished": false,
+  "options": {
+    "autoUpdateConsumingWorkflows": false
+  },
+  "root": {
+    "type": "Elsa.Flowchart",
+    "version": 1,
+    "id": "1c8d6ef1154f9b85",
+    "nodeId": "Workflow1:1c8d6ef1154f9b85",
+    "metadata": {},
+    "customProperties": {
+      "source": "FlowchartJsonConverter.cs:45",
+      "notFoundConnections": [],
+      "canStartWorkflow": false,
+      "runAsynchronously": false
+    },
+    "activities": [
+      {
+        "id": "91602775234ade0d",
+        "nodeId": "Workflow1:1c8d6ef1154f9b85:91602775234ade0d",
+        "name": "Start1",
+        "type": "Elsa.Start",
+        "version": 1,
+        "customProperties": {
+          "canStartWorkflow": false,
+          "runAsynchronously": false
+        },
+        "metadata": {
+          "designer": {
+            "position": {
+              "x": 85.828125,
+              "y": 40
+            },
+            "size": {
+              "width": 101.65625,
+              "height": 50
+            }
+          }
+        }
+      },
+      {
+        "inDataframe": null,
+        "mode": null,
+        "delimiter": null,
+        "startLine": null,
+        "endLine": null,
+        "outDataframe": null,
+        "fileName": null,
+        "id": "78aa599696f775f0",
+        "nodeId": "Workflow1:1c8d6ef1154f9b85:78aa599696f775f0",
+        "name": "ExportToFile1",
+        "type": "Slices.ExportToFile",
+        "version": 1,
+        "customProperties": {
+          "canStartWorkflow": false,
+          "runAsynchronously": false
+        },
+        "metadata": {
+          "designer": {
+            "position": {
+              "x": 797.8984375,
+              "y": 40
+            },
+            "size": {
+              "width": 127.734375,
+              "height": 50
+            }
+          }
+        }
+      },
+      {
+        "inDataframe": null,
+        "columnsToRemove": {
+          "typeName": "String",
+          "expression": {
+            "type": "Literal",
+            "value": "Height,WholeWeight,Rings"
+          }
+        },
+        "outDataframe": null,
+        "id": "7f15035bf2eaf544",
+        "nodeId": "Workflow1:1c8d6ef1154f9b85:7f15035bf2eaf544",
+        "name": "DropColumns1",
+        "type": "Slices.DropColumns",
+        "version": 1,
+        "customProperties": {
+          "canStartWorkflow": false,
+          "runAsynchronously": false
+        },
+        "metadata": {
+          "designer": {
+            "position": {
+              "x": 562.4921875,
+              "y": 40
+            },
+            "size": {
+              "width": 133.078125,
+              "height": 50
+            }
+          }
+        }
+      },
+      {
+        "fileName": {
+          "typeName": "String",
+          "expression": {
+            "type": "Literal",
+            "value": "pipe.csv"
+          }
+        },
+        "mode": null,
+        "delimiter": {
+          "typeName": "String",
+          "expression": {
+            "type": "Literal",
+            "value": "Pipe"
+          }
+        },
+        "startLine": null,
+        "endLine": null,
+        "outDataframe": null,
+        "id": "e583fd79068bf148",
+        "nodeId": "Workflow1:1c8d6ef1154f9b85:e583fd79068bf148",
+        "name": "ImportTextData1",
+        "type": "Slices.ImportTextData",
+        "version": 1,
+        "customProperties": {
+          "canStartWorkflow": false,
+          "runAsynchronously": false
+        },
+        "metadata": {
+          "designer": {
+            "position": {
+              "x": 316.3046875,
+              "y": 40
+            },
+            "size": {
+              "width": 149.296875,
+              "height": 50
+            }
+          }
+        }
+      }
+    ],
+    "connections": [
+      {
+        "source": {
+          "activity": "91602775234ade0d",
+          "port": "Done"
+        },
+        "target": {
+          "activity": "e583fd79068bf148",
+          "port": "In"
+        }
+      },
+      {
+        "source": {
+          "activity": "e583fd79068bf148",
+          "port": "Done"
+        },
+        "target": {
+          "activity": "7f15035bf2eaf544",
+          "port": "In"
+        }
+      },
+      {
+        "source": {
+          "activity": "7f15035bf2eaf544",
+          "port": "Done"
+        },
+        "target": {
+          "activity": "78aa599696f775f0",
+          "port": "In"
+        }
+      }
+    ]
+  }
+}

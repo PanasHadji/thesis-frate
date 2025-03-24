@@ -7,7 +7,7 @@ using Orchestrator.Managers;
 namespace Orchestrator.Server.Activities;
 
 
-[Activity("Slices", Category = "SLICES", DisplayName = "Export To CSV")]
+[Activity("Slices", Category = "FRATE", DisplayName = "Export To CSV")]
 public class ExportToCsv : PythonFaasActivityBase
 {
     #region Input/Output

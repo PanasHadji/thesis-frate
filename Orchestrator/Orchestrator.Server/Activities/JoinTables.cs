@@ -9,7 +9,7 @@ using Orchestrator.Managers;
 namespace Orchestrator.Server.Activities;
 
 
-[Activity("Slices", Category = "SLICES", DisplayName = "Join Tables")]
+[Activity("Slices", Category = "FRATE", DisplayName = "Join Tables")]
 public class JoinTables : PythonFaasActivityBase
 {
     #region Input/Output

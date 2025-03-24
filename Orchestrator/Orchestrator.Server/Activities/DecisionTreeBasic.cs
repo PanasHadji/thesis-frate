@@ -8,7 +8,7 @@ using Orchestrator.Managers;
 
 namespace Orchestrator.Server.Activities;
 
-[Activity("Slices", Category = "SLICES", DisplayName = "Decision Tree Basic", Description = "Decision Tree Classifier used using sklearn")]
+[Activity("Slices", Category = "FRATE", DisplayName = "Decision Tree Basic", Description = "Decision Tree Classifier used using sklearn")]
 public class DecisionTreeBasic : PythonFaasActivityBase
 {
     #region Inputs

@@ -8,7 +8,7 @@ using Orchestrator.Managers;
 
 namespace Orchestrator.Server.Activities;
 
-[Activity("Slices", Category = "SLICES", DisplayName = "Filter Df")]
+[Activity("Slices", Category = "FRATE", DisplayName = "Filter Df")]
 public class FilterDf : PythonFaasActivityBase
 {
     #region Inputs/Outputs

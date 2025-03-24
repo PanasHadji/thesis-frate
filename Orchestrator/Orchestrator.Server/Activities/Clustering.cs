@@ -8,7 +8,7 @@ using Orchestrator.Managers;
 
 namespace Orchestrator.Server.Activities;
 
-[Activity("Slices", Category = "SLICES", DisplayName = "Clustering",
+[Activity("Slices", Category = "FRATE", DisplayName = "Clustering",
     Description = "Clustering Classifier using scikit-learn algorithms")]
 public class Clustering : PythonFaasActivityBase
 {

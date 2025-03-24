@@ -6,7 +6,7 @@ using Orchestrator.Managers;
 
 namespace Orchestrator.Server.Activities;
 
-[Activity("Slices", Category = "SLICES", DisplayName = "Impute Missing Values")]
+[Activity("Slices", Category = "FRATE", DisplayName = "Impute Missing Values")]
 public class ImputeMissingValues : PythonFaasActivityBase
 {
     #region Inputs/Outputs

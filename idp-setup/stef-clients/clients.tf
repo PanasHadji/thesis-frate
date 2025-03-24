@@ -1,8 +1,8 @@
-﻿resource "keycloak_openid_client" "stef" {
+﻿resource "keycloak_openid_client" "frate" {
   realm_id  = var.kc_realm_id
-  client_id = "stef"
+  client_id = "frate"
 
-  name        = "STEF"
+  name        = "FRATE"
   access_type = "CONFIDENTIAL"
 
   standard_flow_enabled = true
@@ -18,13 +18,13 @@
   frontchannel_logout_enabled = true
 }
 
-resource "keycloak_openid_user_client_role_protocol_mapper" "stef_roles" {
+resource "keycloak_openid_user_client_role_protocol_mapper" "frate_roles" {
   realm_id  = var.kc_realm_id
-  client_id = keycloak_openid_client.stef.id
-  name      = "stef-roles"
+  client_id = keycloak_openid_client.frate.id
+  name      = "frate-roles"
 
   claim_name                  = "resource_access.$${client_id}.roles"
-  client_id_for_role_mappings = keycloak_openid_client.stef.client_id
+  client_id_for_role_mappings = keycloak_openid_client.frate.client_id
   multivalued                 = true
 
   add_to_access_token = true
@@ -33,9 +33,9 @@ resource "keycloak_openid_user_client_role_protocol_mapper" "stef_roles" {
 }
 
 
-resource "keycloak_openid_client_default_scopes" "stef_scopes_default" {
+resource "keycloak_openid_client_default_scopes" "frate_scopes_default" {
   realm_id  = var.kc_realm_id
-  client_id = keycloak_openid_client.stef.id
+  client_id = keycloak_openid_client.frate.id
 
   default_scopes = [
     "profile",
@@ -43,9 +43,9 @@ resource "keycloak_openid_client_default_scopes" "stef_scopes_default" {
   ]
 }
 
-resource "keycloak_openid_client_optional_scopes" "stef_scopes_optional" {
+resource "keycloak_openid_client_optional_scopes" "frate_scopes_optional" {
   realm_id  = var.kc_realm_id
-  client_id = keycloak_openid_client.stef.id
+  client_id = keycloak_openid_client.frate.id
 
   optional_scopes = []
 }
