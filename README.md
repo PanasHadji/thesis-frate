@@ -94,43 +94,6 @@ FRaTE requires Keycloak for authentication and identity management. Follow these
 
 ---
 
-## Development Mode (for ELSA)
-### Running Elsa API in Development Mode
-1. Navigate to:
-   ```sh
-   Orchestrator.Frate/Orchestrator/Orchestrator.Server
-   ```
-2. Run the following command:
-   ```sh
-   dotnet run --urls "https://localhost:24000"
-   ```
-
-### Running Elsa (UI) Designer in Development Mode
-1. Navigate to:
-   ```sh
-   Orchestrator.Frate/Orchestrator/Orchestrator.Elsa.Designer
-   ```
-2. Run the following command:
-   ```sh
-   dotnet run --urls "https://localhost:5002"
-   ```
-3. Ensure that the **Backend URL configuration** in `Orchestrator.Elsa.Designer/wwwroot/appsettings.json` matches your Elsa API host.
-
----
-
-## Making Changes
-### Existing Python Nodes
-- **Modifying `requirements.txt`**: The associated container will be **automatically rebuilt**.
-- **Modifying other files**: Changes will be **instantly updated** in the container.
-
-### Adding New Python Nodes
-1. **Duplicate an existing node folder**.
-2. **Duplicate the corresponding entry** in `docker-compose.yml`.
-3. **Duplicate the corresponding entry** in the `Tiltfile` using `kn_func_node()`.
-
-### Elsa / C# Changes
-- Any changes will automatically trigger a **full container rebuild** (this process will be optimized in future updates).
-
 ## How to Use  
 
 Follow these steps to use FRaTE effectively:  
@@ -176,4 +139,40 @@ Follow these steps to use FRaTE effectively:
   ![image](https://github.com/user-attachments/assets/4f2ee2ee-3a00-40bb-ab67-4847c9e57492)
 - Also find dummy datasets that can be uploaded to Minio here: https://github.com/PanasHadji/thesis-frate/tree/main/example-datasets
 
+## Development Mode (for ELSA)
+### Running Elsa API in Development Mode
+1. Navigate to:
+   ```sh
+   Orchestrator.Frate/Orchestrator/Orchestrator.Server
+   ```
+2. Run the following command:
+   ```sh
+   dotnet run --urls "https://localhost:24000"
+   ```
+
+### Running Elsa (UI) Designer in Development Mode
+1. Navigate to:
+   ```sh
+   Orchestrator.Frate/Orchestrator/Orchestrator.Elsa.Designer
+   ```
+2. Run the following command:
+   ```sh
+   dotnet run --urls "https://localhost:5002"
+   ```
+3. Ensure that the **Backend URL configuration** in `Orchestrator.Elsa.Designer/wwwroot/appsettings.json` matches your Elsa API host.
+
+---
+
+## Making Changes
+### Existing Python Nodes
+- **Modifying `requirements.txt`**: The associated container will be **automatically rebuilt**.
+- **Modifying other files**: Changes will be **instantly updated** in the container.
+
+### Adding New Python Nodes
+1. **Duplicate an existing node folder**.
+2. **Duplicate the corresponding entry** in `docker-compose.yml`.
+3. **Duplicate the corresponding entry** in the `Tiltfile` using `kn_func_node()`.
+
+### Elsa / C# Changes
+- Any changes will automatically trigger a **full container rebuild** (this process will be optimized in future updates).
 
