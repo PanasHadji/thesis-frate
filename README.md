@@ -143,12 +143,14 @@ Follow these steps to use FRaTE effectively:
 
 ### 2. Logging in  
 - Wait for **Keycloak authentication** to redirect you to the login page.  
-- Enter your credentials and log in.  
+- Enter your credentials and log in.
+![image](https://github.com/user-attachments/assets/c0597702-24fd-44b6-8f7a-e1a28ed50567)
 
 ### 3. Workflow Designer (ELSA Workflow Designer)  
 - Open the **menu on the left** to:  
   - **Create new workflows**  
   - **View workflow executions**  
+![image](https://github.com/user-attachments/assets/e42c6b53-5907-4951-9138-1ed5443ad4dd)
 
 ### 4. Workflow Builder  
 - The **Workflow Builder** provides various activities.  
@@ -156,6 +158,7 @@ Follow these steps to use FRaTE effectively:
   - **Start Activity** (in the **Flow** category).  
   - Activities in the **Classification** and **FRaTE** categories.  
 - Other activities are not customized for this thesis demo.  
+![image](https://github.com/user-attachments/assets/60fae9a4-a2f9-4098-b746-cb543f898553)
 
 ### 5. MinIO Storage  
 - In the **Tilt UI**, click on **MinIO** and then on its **open port**.  
@@ -165,8 +168,12 @@ Follow these steps to use FRaTE effectively:
 - You can view the **storage bucket** where:  
   - Datasets are uploaded.  
   - Workflow outputs are stored.  
+![image](https://github.com/user-attachments/assets/ae1df56e-3d9b-4cd9-a1c1-5d11fcc12633)
 
 ### 6. Importing Predefined Workflows  
-- Click on **"Import Workflow"** to use pre-built workflow examples.  
+- Click on **"Import Workflow"** and use pre-built workflow examples.
 - You can find example workflows here: https://github.com/PanasHadji/thesis-frate/tree/main/example-workflows.
+  ![image](https://github.com/user-attachments/assets/4f2ee2ee-3a00-40bb-ab67-4847c9e57492)
+- Also find dummy datasets that can be uploaded to Minio here: https://github.com/PanasHadji/thesis-frate/tree/main/example-datasets
+
 
