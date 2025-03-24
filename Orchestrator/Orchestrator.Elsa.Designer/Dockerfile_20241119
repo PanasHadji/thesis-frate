@@ -1,0 +1,33 @@
+﻿# Base image with .NET ASP.NET runtime for Blazor app
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+USER $APP_UID
+WORKDIR /app
+EXPOSE 80
+EXPOSE 443
+
+# Build stage with .NET SDK
+FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+ARG BUILD_CONFIGURATION=Release
+WORKDIR /src
+
+# Optional: Add rsync if caching dependencies is necessary
+RUN apt-get update && apt-get install -y rsync
+COPY ["Orchestrator.Elsa.Designer/Orchestrator.Elsa.Designer.csproj", "Orchestrator.Elsa.Designer/"]
+RUN dotnet restore "Orchestrator.Elsa.Designer/Orchestrator.Elsa.Designer.csproj"
+
+# Copy the remaining files
+COPY . .
+
+WORKDIR "/src/Orchestrator.Elsa.Designer"
+RUN dotnet build "Orchestrator.Elsa.Designer.csproj" -c $BUILD_CONFIGURATION -o /app/build
+
+# Publish stage
+FROM build AS publish
+ARG BUILD_CONFIGURATION=Release
+RUN dotnet publish "Orchestrator.Elsa.Designer.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+
+# Final runtime image
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "Orchestrator.Elsa.Designer.dll"]

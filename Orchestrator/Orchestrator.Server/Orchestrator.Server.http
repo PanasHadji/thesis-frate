@@ -1,0 +1,6 @@
+@Orchestrator.Server_HostAddress = http://localhost:5117
+
+GET {{Orchestrator.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

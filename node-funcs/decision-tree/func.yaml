@@ -1,0 +1,8 @@
+specVersion: 0.35.0
+name: decision-tree
+runtime: python
+registry: v1
+image: v1/decision-tree:latest
+created: 2024-04-09T20:41:28.9323805+02:00
+build:
+  builder: pack

@@ -1,0 +1,68 @@
+﻿@using Orchestrator.Elsa.Designer.Shared
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@inject IJSRuntime JSRuntime
+@inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject SignOutSessionStateManager SignOutManager
+
+<CascadingAuthenticationState>
+    <Router AppAssembly="@typeof(App).Assembly">
+        <Found Context="routeData">
+            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+                <NotAuthorized>
+                    @if (!_isAuthenticated)
+                    {
+                        <RedirectToLogin/>
+                    }
+                    else
+                    {
+                        <p role="alert">You are not authorized to access this resource.</p>
+                    }
+                </NotAuthorized>
+            </AuthorizeRouteView>
+            <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+        </Found>
+        <NotFound>
+            <PageTitle>Not found</PageTitle>
+            <LayoutView Layout="@typeof(MainLayout)">
+                <p role="alert">Sorry, there's nothing at this address.</p>
+            </LayoutView>
+        </NotFound>
+    </Router>
+
+    <!-- Elsa Studio Integration -->
+    <div id="elsa">Loading Elsa Studio...</div>
+
+    <!-- User Authentication Controls -->
+    <AuthorizeView>
+        <Authorized>
+            <button class="floating-icon-btn" @onclick="BeginSignOut">
+                <img src="logout.png" alt="Log out" />
+            </button>
+        </Authorized>
+    </AuthorizeView>
+</CascadingAuthenticationState>
+
+@code {
+    private bool _isAuthenticated;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Redirect to login if the user is not authenticated
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        _isAuthenticated = user.Identity?.IsAuthenticated ?? false;
+
+        if (!_isAuthenticated)
+        {
+            NavigationManager.NavigateTo("authentication/login");
+        }
+    }
+    
+    private async Task BeginSignOut()
+    {
+        await SignOutManager.SetSignOutState();
+        NavigationManager.NavigateTo("authentication/logout");
+    }
+}

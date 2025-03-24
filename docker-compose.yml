@@ -1,0 +1,236 @@
+services:
+  orchestrator:
+    build:
+      context: orchestrator
+      dockerfile: Orchestrator.Server/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: 'Development'
+      ASPNETCORE_Slices__Workflow__AccessKey: minio_admin
+      ASPNETCORE_Slices__Workflow__SecretKey: minio_admin_password
+      ASPNETCORE_Slices__Workflow__Bucket: stef-workflow-artifacts
+      ASPNETCORE_ConnectionStrings__elsadb: 'Host=postgres;Port=5432;Database=stef;Username=sa;Password=password1!;'
+    ports:
+      - '24000:8080' # Align if Dockerfile uses 80 as the main serving port
+    depends_on:
+      - postgres
+  
+  orchestrator-designer:
+    build:
+      context: orchestrator
+      dockerfile: Orchestrator.Elsa.Designer/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: 'Development'
+      Backend__Url: 'https://localhost:5001/elsa/api' # Should be the Elsa.Server host
+    ports:
+      - '24006:80'
+      - '24007:443'
+  
+  postgres:
+    image: postgres:15
+    container_name: postgres
+    environment:
+      POSTGRES_USER: sa
+      POSTGRES_PASSWORD: password1!
+      POSTGRES_DB: stef
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      
+      # test-blazor-designer:
+      #   build: 
+      #     context: ./Orchestrator 
+      #     dockerfile: BlazorApp1/Dockerfile
+      #   environment:
+      #     ASPNETCORE_ENVIRONMENT: 'Development'
+      #   ports:
+      #     - '24009:80' 
+  
+  minio:
+    image: docker.io/bitnami/minio:2024
+    ports:
+      - '24001:24001'
+      - '24002:24002'
+    volumes:
+      - 'minio_data:/bitnami/minio/data'
+    environment:
+      MINIO_ROOT_USER: minio_admin
+      MINIO_ROOT_PASSWORD: minio_admin_password
+      MINIO_DEFAULT_BUCKETS: stef-workflow-artifacts
+      MINIO_API_PORT_NUMBER: 24001
+      MINIO_CONSOLE_PORT_NUMBER: 24002
+      BITNAMI_DEBUG: 'true'
+  
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    depends_on:
+      - orchestrator
+      - postgres
+  
+  postgres-exporter:
+    image: prometheuscommunity/postgres-exporter
+    environment:
+      DATA_SOURCE_NAME: "postgresql://sa:password1!@postgres:5432/stef?sslmode=disable"
+    ports:
+      - "9187:9187"
+    depends_on:
+      - postgres
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana_data:/var/lib/grafana
+    depends_on:
+      - prometheus
+
+  # FaaS-based node implementations
+  impute-missing-values:
+    image: ghcr.io/inspire-research-center/stef-impute-missing-values
+    environment:
+      PYTHONUNBUFFERED: 1
+
+  stats:
+    image: ghcr.io/inspire-research-center/stef-stats
+    environment:
+      PYTHONUNBUFFERED: 1
+
+  export-csv:
+    image: ghcr.io/inspire-research-center/stef-export-csv
+    environment:
+      PYTHONUNBUFFERED: 1
+
+  read-csv:
+    image: ghcr.io/inspire-research-center/stef-read-csv
+    environment:
+      PYTHONUNBUFFERED: 1
+  
+  #  decision-tree:
+  #    image: ghcr.io/inspire-research-center/stef-decision-tree
+  #    environment:
+  #      PYTHONUNBUFFERED: 1
+
+  filter-df:
+    image: ghcr.io/inspire-research-center/stef-filter-df
+    environment:
+      PYTHONUNBUFFERED: 1
+
+  drop-columns:
+    image: ghcr.io/inspire-research-center/stef-drop-columns
+    environment:
+      PYTHONUNBUFFERED: 1
+  
+  sort-columns:
+    image: ghcr.io/inspire-research-center/stef-sort-columns
+    environment:
+      PYTHONUNBUFFERED: 1
+
+  calculate-trust-stats:
+    image: ghcr.io/inspire-research-center/stef-calculate-trust-stats
+    environment:
+      PYTHONUNBUFFERED: 1
+
+  manage-outliers:
+    image: ghcr.io/inspire-research-center/stef-manage-outliers
+    environment:
+      PYTHONUNBUFFERED: 1
+
+  clustering-v2:
+    image: ghcr.io/inspire-research-center/stef-clustering-v2
+    environment:
+      PYTHONUNBUFFERED: 1
+  
+  decision-tree-basic:
+    image: ghcr.io/inspire-research-center/stef-decision-tree-basic
+    environment:
+      PYTHONUNBUFFERED: 1
+      
+      #  correlation-analysis:
+      #    image: ghcr.io/inspire-research-center/stef-correlation-analysis
+      #    environment:
+      #      PYTHONUNBUFFERED: 1    
+      #      
+      #  normalization:
+      #    image: ghcr.io/inspire-research-center/stef-normalization
+      #    environment:
+      #      PYTHONUNBUFFERED: 1
+  
+  import-text-data:
+    image: ghcr.io/inspire-research-center/stef-import-text-data
+    environment:
+      PYTHONUNBUFFERED: 1
+  
+  import-online-data:
+    image: ghcr.io/inspire-research-center/stef-import-online-data
+    environment:
+      PYTHONUNBUFFERED: 1
+  
+  export-to-file:
+    image: ghcr.io/inspire-research-center/stef-export-to-file
+    environment:
+      PYTHONUNBUFFERED: 1
+      
+      #  append-tables:
+      #    image: ghcr.io/inspire-research-center/stef-append-tables
+      #    environment:
+      #      PYTHONUNBUFFERED: 1 
+      #      
+      #  join-tables:
+      #    image: ghcr.io/inspire-research-center/stef-join-tables
+      #    environment:
+      #      PYTHONUNBUFFERED: 1
+      #      
+      #  nearest-neighbors:
+      #    image: ghcr.io/inspire-research-center/stef-nearest-neighbors
+      #    environment:
+      #      PYTHONUNBUFFERED: 1
+      #      
+      #  random-forest:
+      #    image: ghcr.io/inspire-research-center/stef-random-forest
+      #    environment:
+      #      PYTHONUNBUFFERED: 1
+      #      
+      #  linear-svm:
+      #    image: ghcr.io/inspire-research-center/stef-linear-svm
+      #    environment:
+      #      PYTHONUNBUFFERED: 1
+      #      
+      #  rbf-svm:
+      #    image: ghcr.io/inspire-research-center/stef-rbf-svm
+      #    environment:
+      #      PYTHONUNBUFFERED: 1
+  
+  neural-network:
+    image: ghcr.io/inspire-research-center/stef-neural-network
+    environment:
+      PYTHONUNBUFFERED: 1
+
+#  ada-boost:
+#    image: ghcr.io/inspire-research-center/stef-ada-boost
+#    environment:
+#      PYTHONUNBUFFERED: 1
+#      
+#  naive-bayes:
+#    image: ghcr.io/inspire-research-center/stef-naive-bayes
+#    environment:
+#      PYTHONUNBUFFERED: 1
+#      
+#  xg-boost:
+#    image: ghcr.io/inspire-research-center/stef-xg-boost
+#    environment:
+#      PYTHONUNBUFFERED: 1
+
+volumes:
+  minio_data:
+  postgres_data:
+  grafana_data:

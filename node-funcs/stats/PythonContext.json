@@ -1,0 +1,28 @@
+{
+  "inputs": {
+    "FileName": {
+      "type": "literalJSON",
+      "value": "output-Dataframe.csv"
+    }
+  },
+  "config": {
+    "access_key": {
+      "type": "literalJSON",
+      "value": "f96GUAx170HOafosBZLo"
+    },
+    "secret_key": {
+      "type": "literalJSON",
+      "value": "oGrYwWyfmQwJDBK3sXeI0qQ7VND71CksxhxuoAeR"
+    },
+    "bucket_name": {
+      "type": "literalJSON",
+      "value": "python-test-bucket"
+    }
+  },
+  "outputs": {
+    "Dataframe": {
+      "type": "pickleDf",
+      "destination": "nullStats.txt"
+    }
+  }
+}

@@ -1,0 +1,8 @@
+{
+    "version":  "knative-v1.14.0",
+    "license":  "",
+    "url":  "https://github.com/knative/func/releases/download/knative-v1.14.0/func_windows_amd64.exe",
+    "homepage":  "",
+    "hash":  "23031685a21bfaa08af476359335e60101b6aa3f2ce816920500223370c09d05",
+    "bin":  [["func_windows_amd64.exe", "kn-func"]]
+}

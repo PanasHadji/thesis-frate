@@ -1,0 +1,34 @@
+@page "/"
+
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using System.Security.Claims
+
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager Navigation
+
+<PageTitle>Index</PageTitle>
+@if (!isAuthenticated)
+{
+    Navigation.NavigateTo("authentication/login");
+}
+
+@code {
+    private bool isAuthenticated = false;
+
+    private IEnumerable<Claim> claims = Enumerable.Empty<Claim>();
+
+    protected override Task OnInitializedAsync() => GetClaimsPrincipalData();
+    
+    private async Task GetClaimsPrincipalData()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        isAuthenticated = user.Identity?.IsAuthenticated ?? false;
+        if (user.Identity?.IsAuthenticated ?? false)
+        {
+            claims = user.Claims;
+        }
+    }
+
+}

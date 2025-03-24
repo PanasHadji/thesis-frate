@@ -1,0 +1,5 @@
+
+
+Column 'diagnosis' converted using Label Encoding:
+  'B' -> '0'
+  'M' -> '1'

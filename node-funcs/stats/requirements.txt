@@ -1,0 +1,4 @@
+parliament-functions==0.1.0
+minio==7.2.5
+pandas==2.1.4
+scipy==1.11.3

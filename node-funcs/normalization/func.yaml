@@ -1,0 +1,8 @@
+specVersion: 0.35.0
+name: null-stats
+runtime: python
+registry: v1
+image: v1/null-stats:latest
+created: 2024-04-09T23:41:35.1217936+02:00
+build:
+  builder: pack

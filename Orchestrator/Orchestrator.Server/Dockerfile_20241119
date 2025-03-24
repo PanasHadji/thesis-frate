@@ -1,0 +1,47 @@
+﻿# Base image with .NET ASP.NET runtime
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+WORKDIR /app
+EXPOSE 80
+EXPOSE 443
+
+# Build stage with .NET SDK
+FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+ARG BUILD_CONFIGURATION=Release
+WORKDIR /src
+
+# Using rsync for efficient build context copying of project files only
+RUN apt-get update && apt-get install -y rsync
+COPY ["Orchestrator.Server/Orchestrator.Server.csproj", "Orchestrator.Server/"]
+RUN dotnet restore "Orchestrator.Server/Orchestrator.Server.csproj"
+
+# Copy the remaining files for the build process
+COPY . .
+
+WORKDIR "/src/Orchestrator.Server"
+RUN dotnet build "Orchestrator.Server.csproj" -c $BUILD_CONFIGURATION -o /app/build
+
+# Publish stage with platform-independent binaries
+FROM build AS publish
+ARG BUILD_CONFIGURATION=Release
+RUN dotnet publish "Orchestrator.Server.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+
+# Final runtime image
+FROM base AS final
+WORKDIR /app
+
+# Install Python 3.11
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    python3.11 \
+    python3.11-dev \
+    libpython3.11 \
+    python3-pip && \
+    rm -rf /var/lib/apt/lists/*
+
+# Create and set permissions for /data directory before switching users
+# Switch to a non-root user only after installations are complete
+RUN mkdir -p /data && chmod 777 /data
+
+# Switch to a non-root user only after installations are complete
+USER $APP_UID
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "Orchestrator.Server.dll"]

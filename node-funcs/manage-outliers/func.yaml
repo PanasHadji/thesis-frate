@@ -1,0 +1,8 @@
+specVersion: 0.35.0
+name: export-csv
+runtime: python
+registry: v1
+image: index.docker.io/v1/export-csv:latest
+created: 2024-04-09T23:53:29.4526616+02:00
+build:
+  builder: pack

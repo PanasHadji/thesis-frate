@@ -1,0 +1,8 @@
+{
+  "dev_mode": false,
+  "use_pva97kn_dataset": false,
+  "DEBUG_MODE": false,
+  "min_io_test_bucket": "3122abacc7b46c0b-f66b4fc2136877d0",
+  "use_pandas_data_splitting" : false,
+  "min_io_endpoint": "minio:24001"
+}
