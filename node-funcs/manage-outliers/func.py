@@ -238,29 +238,29 @@ def manage_outliers(req):
         log_event("Error", f"Missing key in JSON input: {exc}")
         trust_metrics["failure"] += 1  # Increment failure count
         trust_metrics["error_frequency"][str(exc)] = trust_metrics["error_frequency"].get(str(exc), 0) + 1
-        _save_logs_and_metrics(logs, trust_metrics, client, bucket_name)
+        _save_logs_and_metrics(logs, trust_metrics, client, bucket_name, req.json['outputs']['Dataframe']['destination'].split('/')[0])
         raise RuntimeError(f"Missing key in JSON input: {exc}")
 
     except S3Error as exc:
         log_event("Error", f"MinIO error: {exc}")
         trust_metrics["failure"] += 1  # Increment failure count
         trust_metrics["error_frequency"][str(exc)] = trust_metrics["error_frequency"].get(str(exc), 0) + 1
-        _save_logs_and_metrics(logs, trust_metrics, client, bucket_name)
+        _save_logs_and_metrics(logs, trust_metrics, client, bucket_name, req.json['outputs']['Dataframe']['destination'].split('/')[0])
         raise RuntimeError(f"An error occurred while reading from or uploading to MinIO: {exc}")
 
     except Exception as exc:
         log_event("Error", f"General processing error: {exc}")
         trust_metrics["failure"] += 1  # Increment failure count
         trust_metrics["error_frequency"][str(exc)] = trust_metrics["error_frequency"].get(str(exc), 0) + 1
-        _save_logs_and_metrics(logs, trust_metrics, client, bucket_name)
+        _save_logs_and_metrics(logs, trust_metrics, client, bucket_name, req.json['outputs']['Dataframe']['destination'].split('/')[0])
         raise RuntimeError(f"Error processing file: {exc}")
 
 
-def _save_logs_and_metrics(logs, trust_metrics, client, bucket_name):
+def _save_logs_and_metrics(logs, trust_metrics, client, bucket_name, path):
     """
     Helper function to save logs and trust metrics to MinIO.
     """
-    log_output_path = "logs.csv"
+    log_output_path = path + "/logs.csv"
     trust_metrics_output_path = "trust_metrics.json"
 
     log_df = pd.DataFrame(logs)

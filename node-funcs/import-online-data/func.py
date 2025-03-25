@@ -155,7 +155,7 @@ def import_text_from_url(req):
         trust_metrics["failure"] += 1  # Increment failure count
         trust_metrics["error_frequency"][str(exc)] = trust_metrics["error_frequency"].get(str(exc), 0) + 1
         # Save logs and metrics before raising the exception
-        _save_logs_and_metrics(logs, trust_metrics, client, bucket_name)
+        _save_logs_and_metrics(logs, trust_metrics, client, bucket_name, req.json['outputs']['Dataframe']['destination'].split('/')[0])
         raise RuntimeError(f"Missing key in JSON input: {exc}")
 
     except S3Error as exc:
@@ -163,7 +163,7 @@ def import_text_from_url(req):
         trust_metrics["failure"] += 1  # Increment failure count
         trust_metrics["error_frequency"][str(exc)] = trust_metrics["error_frequency"].get(str(exc), 0) + 1
         # Save logs and metrics before raising the exception
-        _save_logs_and_metrics(logs, trust_metrics, client, bucket_name)
+        _save_logs_and_metrics(logs, trust_metrics, client, bucket_name, req.json['outputs']['Dataframe']['destination'].split('/')[0])
         raise RuntimeError(f"An error occurred while reading from or uploading to MinIO: {exc}")
 
     except requests.RequestException as exc:
@@ -171,7 +171,7 @@ def import_text_from_url(req):
         trust_metrics["failure"] += 1  # Increment failure count
         trust_metrics["error_frequency"][str(exc)] = trust_metrics["error_frequency"].get(str(exc), 0) + 1
         # Save logs and metrics before raising the exception
-        _save_logs_and_metrics(logs, trust_metrics, client, bucket_name)
+        _save_logs_and_metrics(logs, trust_metrics, client, bucket_name, req.json['outputs']['Dataframe']['destination'].split('/')[0])
         raise RuntimeError(f"Error fetching file from URL: {exc}")
 
     except Exception as exc:
@@ -179,15 +179,15 @@ def import_text_from_url(req):
         trust_metrics["failure"] += 1  # Increment failure count
         trust_metrics["error_frequency"][str(exc)] = trust_metrics["error_frequency"].get(str(exc), 0) + 1
         # Save logs and metrics before raising the exception
-        _save_logs_and_metrics(logs, trust_metrics, client, bucket_name)
+        _save_logs_and_metrics(logs, trust_metrics, client, bucket_name, req.json['outputs']['Dataframe']['destination'].split('/')[0])
         raise RuntimeError(f"Error processing file: {exc}")
 
 
-def _save_logs_and_metrics(logs, trust_metrics, client, bucket_name):
+def _save_logs_and_metrics(logs, trust_metrics, client, bucket_name, path):
     """
     Helper function to save logs and trust metrics to MinIO.
     """
-    log_output_path = "logs.csv"
+    log_output_path = path + "/logs.csv"
     trust_metrics_output_path = "trust_metrics.json"
 
     log_df = pd.DataFrame(logs)

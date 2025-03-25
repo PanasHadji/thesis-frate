@@ -150,7 +150,7 @@ def export_to_file(req):
         trust_metrics["failure"] += 1  # Increment failure count
         trust_metrics["error_frequency"][str(exc)] = trust_metrics["error_frequency"].get(str(exc), 0) + 1
         # Save logs and metrics before raising the exception
-        _save_logs_and_metrics(logs, trust_metrics, client, bucket_name)
+        _save_logs_and_metrics(logs, trust_metrics, client, bucket_name, req.json['outputs']['Dataframe']['destination'].split('/')[0])
         raise RuntimeError(f"Missing key in JSON input: {exc}")
 
     except S3Error as exc:
@@ -158,7 +158,7 @@ def export_to_file(req):
         trust_metrics["failure"] += 1  # Increment failure count
         trust_metrics["error_frequency"][str(exc)] = trust_metrics["error_frequency"].get(str(exc), 0) + 1
         # Save logs and metrics before raising the exception
-        _save_logs_and_metrics(logs, trust_metrics, client, bucket_name)
+        _save_logs_and_metrics(logs, trust_metrics, client, bucket_name, req.json['outputs']['Dataframe']['destination'].split('/')[0])
         raise RuntimeError(f"An error occurred while reading from or uploading to MinIO: {exc}")
 
     except Exception as exc:
@@ -166,29 +166,27 @@ def export_to_file(req):
         trust_metrics["failure"] += 1  # Increment failure count
         trust_metrics["error_frequency"][str(exc)] = trust_metrics["error_frequency"].get(str(exc), 0) + 1
         # Save logs and metrics before raising the exception
-        _save_logs_and_metrics(logs, trust_metrics, client, bucket_name)
+        _save_logs_and_metrics(logs, trust_metrics, client, bucket_name, req.json['outputs']['Dataframe']['destination'].split('/')[0])
         raise RuntimeError(f"Error processing file: {exc}")
 
 
-def _save_logs_and_metrics(logs, trust_metrics, client, bucket_name):
-    """Helper function to save logs and metrics to MinIO"""
-    try:
-        log_output_path = 'logs.csv'
-        log_df = pd.DataFrame(logs)
+def _save_logs_and_metrics(logs, trust_metrics, client, bucket_name, path):
+    """
+    Helper function to save logs and trust metrics to MinIO.
+    """
+    log_output_path = path + "/logs.csv"
+    log_df = pd.DataFrame(logs)
 
-        with BytesIO() as log_buffer:
-            log_df.to_csv(log_buffer, index=False)
-            log_buffer.seek(0)
-            client.put_object(bucket_name, log_output_path, log_buffer, len(log_buffer.getvalue()))
+    with BytesIO() as log_buffer:
+        log_df.to_csv(log_buffer, index=False)
+        log_buffer.seek(0)
+        client.put_object(bucket_name, log_output_path, log_buffer, len(log_buffer.getvalue()))
 
-        trust_metrics_output_path = 'trust_metrics.json'
-        with BytesIO() as trust_buffer:
-            trust_buffer.write(json.dumps(trust_metrics).encode())
-            trust_buffer.seek(0)
-            client.put_object(bucket_name, trust_metrics_output_path, trust_buffer, len(trust_buffer.getvalue()))
-
-    except Exception as e:
-        print(f"Error saving logs or metrics: {e}")
+    trust_metrics_output_path = 'trust_metrics.json'
+    with BytesIO() as trust_buffer:
+        trust_buffer.write(json.dumps(trust_metrics).encode())
+        trust_buffer.seek(0)
+        client.put_object(bucket_name, trust_metrics_output_path, trust_buffer, len(trust_buffer.getvalue()))
 
 
 # Main function to handle incoming requests.
