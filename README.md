@@ -61,15 +61,21 @@ FRaTE requires Keycloak for authentication and identity management. Follow these
    ```sh
    thesis-frate/idp-setup/stef-clients-dev
    ```
-2. Initialize Terraform:
+
+2. Install Terraform:
+   ```sh
+   scoop install terraform
+   ```
+
+3. Initialize Terraform:
    ```sh
    terraform init
    ```
-3. Apply Terraform changes:
+4. Apply Terraform changes:
    ```sh
    terraform apply
    ```
-4. Type `yes` when prompted.
+5. Type `yes` when prompted.
 
 ### Create a Realm User
 1. Open Keycloak and navigate to the **frate** realm.
