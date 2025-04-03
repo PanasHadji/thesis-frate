@@ -14,8 +14,8 @@ from sklearn.cluster import (
     AffinityPropagation, OPTICS
 )
 import hdbscan
-from chart_manager.generate_charts import create_files
-from lime.lime_tabular import LimeTabularExplainer
+#from chart_manager.generate_charts import create_files
+#from lime.lime_tabular import LimeTabularExplainer
 from sklearn.linear_model import LogisticRegression
 
 
@@ -62,8 +62,8 @@ def run_clustering(req):
         log_event("File read from MinIO", f"Size: {len(df)} bytes")
 
         df_numeric = df.select_dtypes(include=[float, int]).dropna()
-        scaler = StandardScaler()
-        df_scaled = pd.DataFrame(scaler.fit_transform(df_numeric))
+#         scaler = StandardScaler()
+#         df_scaled = pd.DataFrame(scaler.fit_transform(df_numeric))
 
         # Initialize clustering model
         if algorithm == "KMeans":
@@ -128,14 +128,14 @@ def run_clustering(req):
 
         # Fit the model
         if algorithm in ["KMeans", "GaussianMixture", "SpectralClustering"]:
-            y_pred = model.fit_predict(df_scaled)
+            y_pred = model.fit_predict(df_numeric)
         elif algorithm == "HDBSCAN":
-            y_pred = model.fit(df_scaled).labels_
+            y_pred = model.fit(df_numeric).labels_
         else:
-            y_pred = model.fit(df_scaled).labels_
+            y_pred = model.fit(df_numeric).labels_
 
         # Evaluate clustering using silhouette score
-        silhouette_avg = silhouette_score(df_scaled, y_pred)
+        silhouette_avg = silhouette_score(df_numeric, y_pred)
 
         # Prepare metrics
         model_metrics = {"silhouette_score": silhouette_avg}
@@ -143,7 +143,7 @@ def run_clustering(req):
             model_metrics.update({
                 "inertia": model.inertia_,
                 "cluster_centers": model.cluster_centers_.tolist(),
-                "inertia_values": [KMeans(n_clusters=i, n_init='auto').fit(df_scaled).inertia_ for i in range(1, 11)]
+                "inertia_values": [KMeans(n_clusters=i, n_init='auto').fit(df_numeric).inertia_ for i in range(1, 11)]
             })
 
         # Save results
@@ -161,41 +161,41 @@ def run_clustering(req):
                 "processing"])
 
         # LIME Explanation
-        log_event("Generating LIME Explanation", "Creating LIME explanation for clustering results.")
-        surrogate_model = LogisticRegression(max_iter=1000)
-        surrogate_model.fit(df_scaled, y_pred)
-
-        lime_explainer = LimeTabularExplainer(
-            training_data=df_scaled.values,
-            feature_names=df_numeric.columns,
-            class_names=[f"Cluster {i}" for i in range(n_clusters)],
-            discretize_continuous=True
-        )
-        log_event("LIME Explainer Initialized",
-                  f"Features: {df_numeric.columns.tolist()}, Classes: {[f'Cluster {i}' for i in range(n_clusters)]}")
-
-        # Explain an instance
-        instance_index = 0  # Explain the first instance
-        lime_explanation = lime_explainer.explain_instance(
-            df_scaled.iloc[instance_index].values,
-            surrogate_model.predict_proba,
-            num_features=len(df_numeric.columns)
-        )
-
-        # Save LIME explanation plot
-        lime_plot = lime_explanation.as_pyplot_figure()
-        lime_plot.suptitle(f"LIME Explanation for Instance {instance_index}")
-        lime_plot_buffer = BytesIO()
-        lime_plot.savefig(lime_plot_buffer, format='png')
-        lime_plot_buffer.seek(0)
-
-        # Upload LIME plot to MinIO
-        lime_plot_filename = f"{output_folder_name}/lime_explanation.png"
-        client.put_object(bucket_name, lime_plot_filename, lime_plot_buffer, len(lime_plot_buffer.getvalue()))
-        log_event("LIME Explanation Plot Uploaded", f"Path: {lime_plot_filename}")
+#         log_event("Generating LIME Explanation", "Creating LIME explanation for clustering results.")
+#         surrogate_model = LogisticRegression(max_iter=1000)
+#         surrogate_model.fit(df_scaled, y_pred)
+# 
+#         lime_explainer = LimeTabularExplainer(
+#             training_data=df_scaled.values,
+#             feature_names=df_numeric.columns,
+#             class_names=[f"Cluster {i}" for i in range(n_clusters)],
+#             discretize_continuous=True
+#         )
+#         log_event("LIME Explainer Initialized",
+#                   f"Features: {df_numeric.columns.tolist()}, Classes: {[f'Cluster {i}' for i in range(n_clusters)]}")
+# 
+#         # Explain an instance
+#         instance_index = 0  # Explain the first instance
+#         lime_explanation = lime_explainer.explain_instance(
+#             df_scaled.iloc[instance_index].values,
+#             surrogate_model.predict_proba,
+#             num_features=len(df_numeric.columns)
+#         )
+# 
+#         # Save LIME explanation plot
+#         lime_plot = lime_explanation.as_pyplot_figure()
+#         lime_plot.suptitle(f"LIME Explanation for Instance {instance_index}")
+#         lime_plot_buffer = BytesIO()
+#         lime_plot.savefig(lime_plot_buffer, format='png')
+#         lime_plot_buffer.seek(0)
+# 
+#         # Upload LIME plot to MinIO
+#         lime_plot_filename = f"{output_folder_name}/lime_explanation.png"
+#         client.put_object(bucket_name, lime_plot_filename, lime_plot_buffer, len(lime_plot_buffer.getvalue()))
+#         log_event("LIME Explanation Plot Uploaded", f"Path: {lime_plot_filename}")
 
         # Additional output for labels and metrics
-        create_files(output_folder_name, algorithm, y_pred, df_scaled, model_metrics, client, bucket_name)
+        #create_files(output_folder_name, algorithm, y_pred, df_scaled, model_metrics, client, bucket_name)
 
         chart_generation_start_time = time.time()
         trust_metrics["processing_time"]["chart_generation"] = max(0, time.time() - chart_generation_start_time)

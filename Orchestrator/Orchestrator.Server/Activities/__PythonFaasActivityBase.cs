@@ -82,7 +82,7 @@ public abstract class PythonFaasActivityBase : CodeActivity
 
         try
         {
-            httpClient.Timeout = TimeSpan.FromMinutes(10);
+            httpClient.Timeout = TimeSpan.FromMinutes(15);
 
             PickleDf = new Variable<PickleDfRef>();
 
@@ -132,7 +132,7 @@ public abstract class PythonFaasActivityBase : CodeActivity
 
             // Gather resource usage metrics (example placeholder)
             executionInfo["ResourceUsage"] = GatherResourceUsage();
-            
+
             executionInfo["ExecInfo"] = jsonString;
 
             // Serialize execution info to JSON
@@ -224,33 +224,39 @@ public abstract class PythonFaasActivityBase : CodeActivity
         {
             object value;
 
-            if (input.Value == null)
+            // if (input.Value = null)
+            // {
+            //     // Look for corresponding output in parent context
+            //     var parentOutput = GetParentOutput(activityContext, input.Key);
+            //     if (parentOutput != null)
+            //     {
+            //         value = parentOutput;
+            //     }
+            //     else
+            //     {
+            //         // Handle null input case as needed
+            //         throw new InvalidOperationException($"Missing input value for {input.Key}");
+            //     }
+            // }
+            // else
+            if (input.Value != null)
             {
-                // Look for corresponding output in parent context
-                var parentOutput = GetParentOutput(activityContext, input.Key);
-                if (parentOutput != null)
+                value = activityContext.Get(input.Value.MemoryBlockReference())!;
+                if (value is PickleDfRef pickleDfRef)
                 {
-                    value = parentOutput;
+                    inputs.Add(input.Key,
+                        new Dictionary<string, object>
+                            { { "type", "pickleDf" }, { "value", pickleDfRef.RelativePath! } });
                 }
                 else
                 {
-                    // Handle null input case as needed
-                    throw new InvalidOperationException($"Missing input value for {input.Key}");
+                    inputs.Add(input.Key,
+                        new Dictionary<string, object> { { "type", "literalJSON" }, { "value", value } });
                 }
             }
             else
             {
-                value = activityContext.Get(input.Value.MemoryBlockReference())!;
-            }
-
-            if (value is PickleDfRef pickleDfRef)
-            {
-                inputs.Add(input.Key,
-                    new Dictionary<string, object> { { "type", "pickleDf" }, { "value", pickleDfRef.RelativePath! } });
-            }
-            else
-            {
-                inputs.Add(input.Key, new Dictionary<string, object> { { "type", "literalJSON" }, { "value", value } });
+                inputs.Add(input.Key, new Dictionary<string, object> { { "type", "literalJSON" }, { "value", "" } });
             }
         }
 

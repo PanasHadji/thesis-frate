@@ -188,7 +188,7 @@ def _save_logs_and_metrics(logs, trust_metrics, client, bucket_name, path):
     Helper function to save logs and trust metrics to MinIO.
     """
     log_output_path = path + "/logs.csv"
-    trust_metrics_output_path = "trust_metrics.json"
+    trust_metrics_output_path = path + "/trust_metrics.json"
 
     log_df = pd.DataFrame(logs)
     with BytesIO() as log_buffer:

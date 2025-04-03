@@ -2,6 +2,7 @@ using Elsa.EntityFrameworkCore.Extensions;
 using Elsa.EntityFrameworkCore.Modules.Management;
 using Elsa.EntityFrameworkCore.Modules.Runtime;
 using Elsa.Extensions;
+using Elsa.Workflows.Activities;
 using FastEndpoints.Swagger;
 using Keycloak.AuthServices.Authentication;
 using Keycloak.AuthServices.Authorization;
@@ -52,15 +53,20 @@ builder.Services.AddElsa(elsa =>
         identity.UseAdminUserProvider();
     });
 
+    var migrationsAssembly = typeof(Elsa.EntityFrameworkCore.PostgreSql.RuntimeDbContextFactory).Assembly;
+    var connectionString = builder.Configuration.GetConnectionString("elsadb")!;
+
     elsa.UseWorkflowManagement(management =>
         management.UseEntityFrameworkCore(ef =>
-            ef.UsePostgreSql(builder.Configuration.GetConnectionString("elsadb")!))
-    );
+            ef.DbContextOptionsBuilder = (_, db) => db.UseElsaPostgreSql(migrationsAssembly, connectionString, null,
+                configure => configure.CommandTimeout(60000))
+        ));
     elsa.UseWorkflowRuntime(runtime =>
-    {
         runtime.UseEntityFrameworkCore(ef =>
-            ef.UsePostgreSql(builder.Configuration.GetConnectionString("elsadb")!));
-    });
+            ef.DbContextOptionsBuilder = (_, db) => db.UseElsaPostgreSql(migrationsAssembly, connectionString, null,
+                configure => configure.CommandTimeout(60000))
+        ));
+    
     elsa.UseJavaScript();
     elsa.UseLiquid();
     elsa.UseHttp();

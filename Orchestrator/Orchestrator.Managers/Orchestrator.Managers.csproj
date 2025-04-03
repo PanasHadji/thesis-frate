@@ -9,6 +9,7 @@
     <ItemGroup>
       <PackageReference Include="Elsa.Workflows.Core" Version="3.2.3" />
       <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.1" />
+      <PackageReference Include="Polly" Version="8.4.2" />
     </ItemGroup>
 
 </Project>

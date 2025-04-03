@@ -5,7 +5,7 @@ from minio.error import S3Error
 from io import BytesIO
 import pickle
 from sklearn.svm import SVC
-from chart_manager.generate_charts import auto_generate_charts_and_report
+#from chart_manager.generate_charts import auto_generate_charts_and_report
 
 
 def linear_svm(req):

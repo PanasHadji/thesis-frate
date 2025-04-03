@@ -1,7 +1,7 @@
 from minio import Minio
 from minio.error import S3Error
 from io import BytesIO
-from chart_builders.dataset_chart_builder import create_files_for_dataframe
+#from chart_builders.dataset_chart_builder import create_files_for_dataframe
 import pickle
 import json
 import datetime
@@ -119,7 +119,7 @@ def impute_missing_values(req):
         chart_generation_start_time = time.time()
 
         # Create additional files for the DataFrame (charts)
-        create_files_for_dataframe(output_file_name.split('/')[0], df, client, bucket_name)
+        #create_files_for_dataframe(output_file_name.split('/')[0], df, client, bucket_name)
 
         # Track chart generation time
         trust_metrics["processing_time"]["chart_generation"] = max(0, time.time() - chart_generation_start_time)

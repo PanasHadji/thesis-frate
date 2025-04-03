@@ -8,8 +8,8 @@ import datetime
 import time
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import train_test_split
-from chart_manager.generate_charts import auto_generate_charts_and_report
-from lime.lime_tabular import LimeTabularExplainer
+#from chart_manager.generate_charts import auto_generate_charts_and_report
+#from lime.lime_tabular import LimeTabularExplainer
 
 
 def decision_tree(req):
@@ -56,11 +56,13 @@ def decision_tree(req):
         criterionEnum = req.json['inputs']['Criterion']['value']
         splitterEnum = req.json['inputs']['Splitter']['value']
 
+        criterion = 'gini'
         if criterionEnum == 1:
             criterion = 'gini'
         elif criterionEnum == 2:
             criterion = 'entropy'
 
+        splitter = 'best'
         if splitterEnum == 1:
             splitter = 'best'
         elif splitterEnum == 2:
@@ -129,31 +131,31 @@ def decision_tree(req):
         log_event("Predictions made", f"Predictions completed. Number of predictions: {len(y_pred)}")
 
         # LIME explanation
-        lime_explainer = LimeTabularExplainer(
-            training_data=X_train.values,
-            feature_names=X_train.columns,
-            class_names=y_train.unique().tolist(),
-            discretize_continuous=True
-        )
-        lime_explanation = lime_explainer.explain_instance(X_test.iloc[0].values, dt_model.predict_proba)
-        lime_explanation_str = lime_explanation.as_list()
-
-        # Log LIME  explanations
-        log_event("LIME Explanation", f"Explanation: {lime_explanation_str}")
-        # Generate the LIME plot
-        fig = lime_explanation.as_pyplot_figure()
-
-        # Save the plot to a BytesIO object
-        plot_buffer = BytesIO()
-        fig.savefig(plot_buffer, format='png')
-        plot_buffer.seek(0)
-
-        # Upload the plot to MinIO
-        plot_filename = f"{output_file_name.split('/')[0]}/lime_plot.png"
-        client.put_object(bucket_name, plot_filename, plot_buffer, len(plot_buffer.getvalue()))
-
-        # Log LIME explanation and plot upload
-        log_event("LIME Plot", f"Uploaded Explanation Plot")
+#         lime_explainer = LimeTabularExplainer(
+#             training_data=X_train.values,
+#             feature_names=X_train.columns,
+#             class_names=y_train.unique().tolist(),
+#             discretize_continuous=True
+#         )
+#         lime_explanation = lime_explainer.explain_instance(X_test.iloc[0].values, dt_model.predict_proba)
+#         lime_explanation_str = lime_explanation.as_list()
+# 
+#         # Log LIME  explanations
+#         log_event("LIME Explanation", f"Explanation: {lime_explanation_str}")
+#         # Generate the LIME plot
+#         fig = lime_explanation.as_pyplot_figure()
+# 
+#         # Save the plot to a BytesIO object
+#         plot_buffer = BytesIO()
+#         fig.savefig(plot_buffer, format='png')
+#         plot_buffer.seek(0)
+# 
+#         # Upload the plot to MinIO
+#         plot_filename = f"{output_file_name.split('/')[0]}/lime_plot.png"
+#         client.put_object(bucket_name, plot_filename, plot_buffer, len(plot_buffer.getvalue()))
+# 
+#         # Log LIME explanation and plot upload
+#         log_event("LIME Plot", f"Uploaded Explanation Plot")
 
         # Results DataFrame
         results_df = pd.DataFrame({
@@ -174,20 +176,20 @@ def decision_tree(req):
             time.time() - start_time - trust_metrics["processing_time"]["file_read"] - trust_metrics["processing_time"][
                 "processing"])
 
-        print('Creating charts')
-        auto_generate_charts_and_report(
-            df=results_df,
-            y_pred=y_pred,
-            output_folder_name=output_file_name.split('/')[0] + "/visualization_reports",
-            client=client,
-            bucket_name=bucket_name
-        )
+#         print('Creating charts')
+#         auto_generate_charts_and_report(
+#             df=results_df,
+#             y_pred=y_pred,
+#             output_folder_name=output_file_name.split('/')[0] + "/visualization_reports",
+#             client=client,
+#             bucket_name=bucket_name
+#         )
 
-        chart_generation_start_time = time.time()
+#         chart_generation_start_time = time.time()
 
-        trust_metrics["processing_time"]["chart_generation"] = max(0, time.time() - chart_generation_start_time)
+#         trust_metrics["processing_time"]["chart_generation"] = max(0, time.time() - chart_generation_start_time)
 
-        log_event("Charts generated for DataFrame")
+#         log_event("Charts generated for DataFrame")
 
         trust_metrics["processing_time"]["total"] = time.time()
 
