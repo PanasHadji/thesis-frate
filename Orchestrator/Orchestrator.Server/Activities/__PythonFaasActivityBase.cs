@@ -18,39 +18,6 @@ public abstract class PythonFaasActivityBase : CodeActivity
     private readonly TrustworthinessManager TrustworthinessManager = new();
     private static Variable<PickleDfRef> PickleDf = new();
 
-
-    /*protected override async ValueTask ExecuteAsync(ActivityExecutionContext activityContext)
-    {
-        var httpClientFactory = activityContext.GetRequiredService<IHttpClientFactory>();
-        var httpClient = httpClientFactory.CreateClient(nameof(PythonFaasActivityBase));
-        httpClient.Timeout = TimeSpan.FromMinutes(10);
-
-        PickleDf = new Variable<PickleDfRef>();
-
-        var scriptContext = GetPythonContext();
-
-        var request = new HttpRequestMessage(HttpMethod.Post, scriptContext.ExecuteUrl); // TODO: Instead of exec url, build a factory!
-
-        string stagingFolderName = string.Join("-", [
-            activityContext.WorkflowExecutionContext.Id,
-            activityContext.Id,
-        ]);
-
-        Dictionary<Argument, string> argumentFileNames = new();
-
-        var jsonString = PreparePythonContextJson(activityContext, scriptContext, stagingFolderName, argumentFileNames);
-
-        var content = new StringContent(jsonString, Encoding.UTF8, "application/json");
-        request.Content = content;
-
-        var cancellationToken = activityContext.CancellationToken;
-        var response = await httpClient.SendAsync(request, cancellationToken);
-        Console.WriteLine(response);
-        await TrustworthinessManager.CalculateByRules(activityContext, httpClientFactory, jsonString, stagingFolderName);
-
-        await HandleOutcome(activityContext, scriptContext, stagingFolderName, argumentFileNames);
-    }*/
-
     protected override async ValueTask ExecuteAsync(ActivityExecutionContext activityContext)
     {
         // Initialize execution info dictionary to capture metrics
@@ -77,6 +44,7 @@ public abstract class PythonFaasActivityBase : CodeActivity
         string jsonString = "";
         Dictionary<Argument, string> argumentFileNames = null;
         HttpResponseMessage response = null;
+        
         var httpClientFactory = activityContext.GetRequiredService<IHttpClientFactory>();
         var httpClient = httpClientFactory.CreateClient(nameof(PythonFaasActivityBase));
 
@@ -103,10 +71,13 @@ public abstract class PythonFaasActivityBase : CodeActivity
             request.Content = content;
 
             var cancellationToken = activityContext.CancellationToken;
+            
+            var linkedCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+            linkedCancellationTokenSource.CancelAfter(TimeSpan.FromMinutes(30));
 
             // Measure dependency latency
             var dependencyStopwatch = Stopwatch.StartNew();
-            response = await httpClient.SendAsync(request, cancellationToken);
+            response = await httpClient.SendAsync(request, linkedCancellationTokenSource.Token);
             dependencyStopwatch.Stop();
             executionInfo["DependencyLatencyMs"] = dependencyStopwatch.ElapsedMilliseconds;
 
