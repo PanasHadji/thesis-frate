@@ -7,6 +7,7 @@ import pickle
 import datetime
 import time
 from sklearn.neural_network import MLPClassifier
+from sklearn.preprocessing import StandardScaler
 #from chart_manager.generate_charts import auto_generate_charts_and_report
 #from lime.lime_tabular import LimeTabularExplainer
 
@@ -84,18 +85,21 @@ def neural_network(req):
         # Prepare features and target
         X = df_clean.drop(columns=[target_column])
         y = df_clean[target_column]
+        
+        scaler = StandardScaler()
+        X_scaled = scaler.fit_transform(X)
 
         log_event("Fitting Neural Network Model (MLPClassifier)", "Training Neural Network Model (MLPClassifier).")
         # Fit the Neural Network model (MLPClassifier)
-        mlp_model = MLPClassifier(hidden_layer_sizes=(20,), max_iter=20)  # Define a simple MLP model
-        mlp_model.fit(X, y)
+        mlp_model = MLPClassifier(hidden_layer_sizes=(50,), max_iter=500, solver='lbfgs', early_stopping=True, n_iter_no_change=10)
+        mlp_model.fit(X_scaled, y)
 
         # Predictions
         log_event("Model trained", "Decision Tree model training completed.")
 
         # Predictions
         log_event("Making Predictions", "Making predictions on the test set.")
-        y_pred = mlp_model.predict(X)
+        y_pred = mlp_model.predict(X_scaled)
 
         log_event("Predictions made", f"Predictions completed. Number of predictions: {len(y_pred)}")
 

@@ -31,7 +31,7 @@ public class TrustworthinessManager
                 request.Content = content;
 
                 // Send the request asynchronously with the cancellation token
-                return await httpClient.SendAsync(request, cancellationToken);
+                return await httpClient.SendAsync(request, CancellationToken.None);
             });
 
             // Log the response (or process it accordingly)

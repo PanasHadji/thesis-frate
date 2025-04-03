@@ -72,12 +72,9 @@ public abstract class PythonFaasActivityBase : CodeActivity
 
             var cancellationToken = activityContext.CancellationToken;
             
-            var linkedCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-            linkedCancellationTokenSource.CancelAfter(TimeSpan.FromMinutes(30));
-
             // Measure dependency latency
             var dependencyStopwatch = Stopwatch.StartNew();
-            response = await httpClient.SendAsync(request, linkedCancellationTokenSource.Token);
+            response = await httpClient.SendAsync(request, CancellationToken.None);
             dependencyStopwatch.Stop();
             executionInfo["DependencyLatencyMs"] = dependencyStopwatch.ElapsedMilliseconds;
 
